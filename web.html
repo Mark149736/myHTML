@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Простой блог</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        article {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        time {
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Простой блог</h1>
+
+    <?php
+    // Подключение к базе данных (предполагается, что вы установили свою базу данных)
+    $db = new mysqli("hostname", "username", "password", "dbname");
+
+    // Проверка подключения
+    if ($db->connect_error) {
+        die("Connection failed: " . $db->connect_error);
+    }
+
+    // Получение статей из базы данных
+    $result = $db->query("SELECT * FROM articles");
+
+    // Вывод статей
+    while ($row = $result->fetch_assoc()) {
+        echo "<article>";
+        echo "<h2>{$row['title']}</h2>";
+        echo "<time>{$row['published_at']}</time>";
+        echo "<p>{$row['content']}</p>";
+        echo "</article>";
+    }
+
+    // Закрытие соединения с базой данных
+    $db->close();
+    ?>
+
+</body>
+</html>

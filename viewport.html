@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Система управления задачами</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Система управления задачами</h1>
+
+    <form action="" method="post">
+        <label for="task">Новая задача:</label>
+        <input type="text" name="task" id="task" required>
+        <button type="submit">Добавить задачу</button>
+    </form>
+
+    <h2>Список задач:</h2>
+
+    <ul>
+        <?php
+        // Подключение к базе данных (предполагается, что вы установили свою базу данных)
+        $db = new mysqli("hostname", "username", "password", "dbname");
+
+        // Проверка подключения
+        if ($db->connect_error) {
+            die("Connection failed: " . $db->connect_error);
+        }
+
+        // Обработка отправки формы
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $task = $_POST["task"];
+            // Вставка новой задачи в базу данных
+            $db->query("INSERT INTO tasks (task) VALUES ('$task')");
+        }
+
+        // Получение задач из базы данных
+        $result = $db->query("SELECT * FROM tasks");
+
+        // Вывод задач
+        while ($row = $result->fetch_assoc()) {
+            echo "<li>{$row['task']}</li>";
+        }
+
+        // Закрытие соединения с базой данных
+        $db->close();
+        ?>
+    </ul>
+
+</body>
+</html>
